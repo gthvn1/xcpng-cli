@@ -1,6 +1,6 @@
 # xcpng-cli
 
-- For now, it is just some simple Python scripts to retrieve information
+- For now, it is just some simple Python scripts to retrieve information mainly
 about the disks, **but** eventually, we aim to build something more interactive, like the [Ranger file manager](https://github.com/ranger/ranger).
   - *repl.py*: runs in interactive mode and just setup a xapi session
   - *xcpng-cli.py*: dumps some info about VM, SR and VDI
