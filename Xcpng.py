@@ -1,30 +1,27 @@
-#!/usr/bin/env python
-
-import XenAPI
-
-session = XenAPI.xapi_local()
-
 def sr_info(s):
     """
     Display all VDIs found on each SR
     """
     sr_rec_list = [s.SR.get_record(sr_ref) for sr_ref in s.SR.get_all()]
     # Only keep sr with VDIs
-    sr_rec_filtered = [sr for sr in sr_rec_list if sr['VDIs']]
+    sr_rec_filtered = [sr for sr in sr_rec_list if sr["VDIs"]]
 
     for sr_rec in sr_rec_filtered:
-        print("> Looking VDI for SR {} {}".format(sr_rec['uuid'], sr_rec['name_label']))
+        print("> Looking VDI for SR {} {}".format(sr_rec["uuid"], sr_rec["name_label"]))
         # sr_rec['VDIs'] contains a list of VDI ref
-        vdi_rec_list = [s.VDI.get_record(vdi_ref) for vdi_ref in sr_rec['VDIs']]
+        vdi_rec_list = [s.VDI.get_record(vdi_ref) for vdi_ref in sr_rec["VDIs"]]
         for vdi_rec in vdi_rec_list:
-            print("    > VDI {} {}".format(vdi_rec['name_label'], vdi_rec['uuid']))
-            print("        -> type: {}".format(vdi_rec['type']))
-            if 'vhd-parent' in vdi_rec['sm_config']:
-                print("        -> parent: {}".format(vdi_rec['sm_config']['vhd-parent']))
-            if vdi_rec['is_a_snapshot']:
+            print("    > VDI {} {}".format(vdi_rec["name_label"], vdi_rec["uuid"]))
+            print("        -> type: {}".format(vdi_rec["type"]))
+            if "vhd-parent" in vdi_rec["sm_config"]:
+                print(
+                    "        -> parent: {}".format(vdi_rec["sm_config"]["vhd-parent"])
+                )
+            if vdi_rec["is_a_snapshot"]:
                 print("        -> is a snaphost")
             else:
                 print("        -> is a not snaphost")
+
 
 def vdis_info(s, vdis_ref):
     """
@@ -43,6 +40,7 @@ def vdis_info(s, vdis_ref):
         print("  -> [LOCATION   ] {}".format(vdi_location))
         print("  -> [SNAPSHOT OF] {}".format(vdi_snap))
         print("  -> [PARENT     ] {}".format(vdi_parent))
+
 
 def get_vdis_ref(s):
     """
@@ -67,7 +65,7 @@ def get_vdis_ref(s):
             vbds = s.VM.get_VBDs(vm_ref)
             for vbd_ref in vbds:
                 vdi_ref = s.VBD.get_VDI(vbd_ref)
-                if vdi_ref == 'OpaqueRef:NULL':
+                if vdi_ref == "OpaqueRef:NULL":
                     vbd_uuid = s.VBD.get_uuid(vbd_ref)
                     print("    -> [VBD] {} ...has no VDI".format(vbd_uuid))
                     print("             Probably not in database...")
@@ -78,17 +76,3 @@ def get_vdis_ref(s):
                     print("    -> [VDI] {}/({})".format(vdi_uuid, vdi_name))
 
     return vdis_found
-
-if __name__ == '__main__':
-    try:
-        print("-- GENERAL INFOS --\n")
-        session.xenapi.login_with_password("root", "xxxx")
-        vdis_ref = get_vdis_ref(session.xenapi)
-        print("\n-- DISKS INFO --\n")
-        vdis_info(session.xenapi, vdis_ref)
-        print("\n-- SR INFO --\n")
-        sr_info(session.xenapi)
-
-    finally:
-        session.xenapi.session.logout()
-

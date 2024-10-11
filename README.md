@@ -5,10 +5,14 @@ about the disks, **but** eventually, we aim to build something more interactive,
   - *repl.py*: runs in interactive mode and just setup a xapi session
   - *xcpng-cli.py*: dumps some info about VM, SR and VDI
   - *vhd-hierarchy.py*: dumps hierarchy of VDIs under `/var/run/sr-mount/`
-- It runs on python-2.7.5
+- XenAPI has been taken from [xapi-project](https://github.com/xapi-project/xen-api/tree/7670247ae6a3c656ae60123dc550a9eb415d5ba4/python3/examples/XenAPI).
+- It has been tested using python3.11
 - And it was **tested a little little bit** on xcpng 8.3
 
+## Run on the XCP-ng host host
+
 ### repl.py
+- Copy the file on your XCP-ng host.
 - You can use `repl.py` in interactive mode. Then you have a session open and can run command easily:
 ```sh
 # python -i repl.py
@@ -21,7 +25,26 @@ You can now copy/paste commands from the other script:
 ...
 ```
 
+### vhd-hierarchy.py
+
+- It displays the hierarchy for VHD files found in `/var/run/sr-mount/`
+- Here is an example of output:
+```sh
+Scanning /var/run/sr-mount/47ccce60-cac2-81c9-398d-4f7c8be07fa8
+Scanning /var/run/sr-mount/4e8be08e-c205-3173-94b9-9fba52e6f0f5
+VHD Hierarchy Report:
+a0199a90-dcbf-477b-8114-953950cb586c.vhd
+    c4ab1da2-3731-405f-9214-5f18eb578065.vhd
+    2158892d-8fc2-41de-97d3-9de93beb5d99.vhd
+        48f3e4ed-05b6-4c26-a600-35346eedb486.vhd
+        87c54ab2-18aa-4768-b606-2b4e76bc04a9.vhd
+```
+
+## Can be run on your machine
+
 ### xcpng-ls.py
+- This one can be run on your machine and it will connect to XCP-ng hosts to get information
+- `python3 ./xcpng-cli.py --ips 1.2.3.4,1.2.3.5 --username <USER> --password <PASS>` 
 - Here is the kind of output you can have currently:
 ```sh
 # ./xcpng-ls.py
@@ -78,19 +101,4 @@ You can now copy/paste commands from the other script:
         -> type: user
         -> parent: 2158892d-8fc2-41de-97d3-9de93beb5d99
         -> is a not snaphost
-```
-
-### vhd-hierarchy.py
-
-- It displays the hierarchy for VHD files found in `/var/run/sr-mount/`
-- Here is an example of output:
-```sh
-Scanning /var/run/sr-mount/47ccce60-cac2-81c9-398d-4f7c8be07fa8
-Scanning /var/run/sr-mount/4e8be08e-c205-3173-94b9-9fba52e6f0f5
-VHD Hierarchy Report:
-a0199a90-dcbf-477b-8114-953950cb586c.vhd
-    c4ab1da2-3731-405f-9214-5f18eb578065.vhd
-    2158892d-8fc2-41de-97d3-9de93beb5d99.vhd
-        48f3e4ed-05b6-4c26-a600-35346eedb486.vhd
-        87c54ab2-18aa-4768-b606-2b4e76bc04a9.vhd
 ```
