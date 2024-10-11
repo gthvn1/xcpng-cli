@@ -1,10 +1,10 @@
 # xcpng-cli
 
-- For now, it is just some simple Python scripts (well, actually just one :) to retrieve information
-about the disks, but eventually, we aim to build something more interactive, like the [Ranger file manager](https://github.com/ranger/ranger).
-  - repl.py: that runs in interactive mode and just setup a xapi session
-  - xcpng-cli.py: dumps some info about VM, SR and VDI
-  - vhd-hierarchy.py: dumps hierarchy of VDIs under `/var/run/sr-mount/`
+- For now, it is just some simple Python scripts to retrieve information
+about the disks, **but** eventually, we aim to build something more interactive, like the [Ranger file manager](https://github.com/ranger/ranger).
+  - *repl.py*: runs in interactive mode and just setup a xapi session
+  - *xcpng-cli.py*: dumps some info about VM, SR and VDI
+  - *vhd-hierarchy.py*: dumps hierarchy of VDIs under `/var/run/sr-mount/`
 - It runs on python-2.7.5
 - And it was **tested a little little bit** on xcpng 8.3
 
