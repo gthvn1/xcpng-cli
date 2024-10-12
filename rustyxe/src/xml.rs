@@ -33,3 +33,97 @@ pub fn create_xmlrpc_request(method: &str, params: Vec<&str>) -> String {
     debug!("XML-RPC request created");
     xml_req
 }
+
+//
+// Extract the value from the XML-RPC response
+// Here is an example of the XML-RPC response:
+// <?xml version="1.0"?>
+// <methodResponse>
+//    <params>
+//      <param>
+//        <value>
+//          <struct>
+//            <member>
+//              <name>Status</name>
+//              <value>Success</value>
+//            </member>
+//            <member>
+//              <name>Value</name>
+//              <value>OpaqueRef:123456789</value>
+//            </member>
+//          </struct>
+//        </value>
+//      </param>
+//    </params>
+//  </methodResponse>
+// Return the Status and the Value
+fn exctract_value(xml_response: &str, tag: &str) -> Option<String> {
+    let value_start_tag = "<value>";
+    let value_end_tag = "</value>";
+
+    if let Some(tag_start) = xml_response.find(tag) {
+        if let Some(value_start) = xml_response[tag_start..].find(value_start_tag) {
+            let value_start_pos = tag_start + value_start + value_start_tag.len();
+            if let Some(value_end) = xml_response[value_start_pos..].find(value_end_tag) {
+                let value_end_pos = value_start_pos + value_end;
+                return Some(xml_response[value_start_pos..value_end_pos].to_string());
+            }
+        }
+    }
+
+    None
+}
+
+pub fn extract_result(xml_response: &str) -> (Option<String>, Option<String>) {
+    (
+        exctract_value(xml_response, "<name>Status</name>"),
+        exctract_value(xml_response, "<name>Value</name>"),
+    )
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    const XML_RESPONSE: &str = r#"
+        <?xml version="1.0"?>
+        <methodResponse>
+           <params>
+             <param>
+               <value>
+                 <struct>
+                   <member>
+                     <name>Status</name>
+                     <value>Success</value>
+                   </member>
+                   <member>
+                     <name>Value</name>
+                     <value>OpaqueRef:123456789</value>
+                   </member>
+                 </struct>
+               </value>
+             </param>
+           </params>
+         </methodResponse>
+    "#;
+
+    #[test]
+    fn extract_status() {
+        let v = match exctract_value(XML_RESPONSE, "<name>Status</name>") {
+            None => String::new(),
+            Some(val) => val,
+        };
+
+        assert_eq!(v, "Success");
+    }
+
+    #[test]
+    fn extract_value() {
+        let v = match exctract_value(XML_RESPONSE, "<name>Value</name>") {
+            None => String::new(),
+            Some(val) => val,
+        };
+
+        assert_eq!(v, "OpaqueRef:123456789");
+    }
+}
