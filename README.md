@@ -9,6 +9,9 @@ about the disks, **but** eventually, we aim to build something more interactive,
 - It has been tested using python3.11
 - And it was **tested a little little bit** on xcpng 8.3
 
+- **rustyxe** is an attempt to write the Xen API command interface in Rust. This is the very beginning. We are able to send the login XML-RPC and received
+the credentials.
+
 ## Run on your machine
 
 ### xcpng-ls.py
