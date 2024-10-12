@@ -11,6 +11,7 @@ about the disks, **but** eventually, we aim to build something more interactive,
 
 - **rustyxe** is an attempt to write the Xen API command interface in Rust. This is the very beginning. We are able to send the login XML-RPC and received
 the credentials.
+  - `RUST_LOG=debug cargo run`
 
 ## Run on your machine
 

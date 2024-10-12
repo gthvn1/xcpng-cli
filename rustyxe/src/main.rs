@@ -1,11 +1,17 @@
 mod config;
 mod xml;
 
+use log::{debug, error};
 use openssl::ssl::{SslConnector, SslMethod};
 use std::io::{Read, Write};
 use std::net::TcpStream;
 
+#[macro_use]
+extern crate log;
+
 fn main() -> std::io::Result<()> {
+    env_logger::init();
+
     // Setup the SSL connector
     let mut builder = SslConnector::builder(SslMethod::tls()).unwrap();
     builder.set_verify(openssl::ssl::SslVerifyMode::NONE);
@@ -22,20 +28,24 @@ fn main() -> std::io::Result<()> {
         vec![config::USERNAME, config::PASSWORD, "1.0"],
     );
 
-    println!("== Request sent ==\n{}", xmlrpc_request);
+    debug!("Request sent");
+    debug!("{}", xmlrpc_request);
     stream.write_all(xmlrpc_request.as_bytes())?;
 
     let mut recv_buf = [0; 1024];
     let recv_bytes = match stream.read(&mut recv_buf) {
         Ok(v) => v,
-        Err(_) => panic!("ERROR: Failed to read stream"),
+        Err(_) => {
+            error!("Failed to read stream");
+            std::process::exit(1);
+        }
     };
 
-    println!("\n== Response received==");
+    debug!("Response received");
     if let Ok(recv_str) = std::str::from_utf8(&recv_buf[..recv_bytes]) {
-        println!("{}", recv_str)
+        debug!("{}", recv_str)
     } else {
-        println!("ERROR: invalid utf8")
+        error!("ERROR: invalid utf8")
     }
 
     Ok(())

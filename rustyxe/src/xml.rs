@@ -30,5 +30,6 @@ pub fn create_xmlrpc_request(method: &str, params: Vec<&str>) -> String {
     xml_req.push_str("\r\n"); // Empty line before body
     xml_req.push_str(xml_body.as_str());
 
+    debug!("XML-RPC request created");
     xml_req
 }
