@@ -58,10 +58,10 @@ pub fn create_xmlrpc_request(method: &str, params: Vec<&str>) -> String {
 //  </methodResponse>
 // Return the Status and the Value
 fn exctract_value(xml_response: &str, tag: &str) -> Option<String> {
-    let value_start_tag = "<value>";
-    let value_end_tag = "</value>";
-
     if let Some(tag_start) = xml_response.find(tag) {
+        let value_start_tag = "<value>";
+        let value_end_tag = "</value>";
+
         if let Some(value_start) = xml_response[tag_start..].find(value_start_tag) {
             let value_start_pos = tag_start + value_start + value_start_tag.len();
             if let Some(value_end) = xml_response[value_start_pos..].find(value_end_tag) {
