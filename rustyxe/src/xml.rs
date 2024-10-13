@@ -57,8 +57,10 @@ pub fn create_xmlrpc_request(method: &str, params: Vec<&str>) -> String {
 //    </params>
 //  </methodResponse>
 // Return the Status and the Value
-fn exctract_value(xml_response: &str, tag: &str) -> Option<String> {
-    if let Some(tag_start) = xml_response.find(tag) {
+fn extract_value_by_name(xml_response: &str, tag: &str) -> Option<String> {
+    let tag_str = format!("<name>{}</name>", tag);
+
+    if let Some(tag_start) = xml_response.find(&tag_str) {
         let value_start_tag = "<value>";
         let value_end_tag = "</value>";
 
@@ -76,8 +78,8 @@ fn exctract_value(xml_response: &str, tag: &str) -> Option<String> {
 
 pub fn extract_result(xml_response: &str) -> (Option<String>, Option<String>) {
     (
-        exctract_value(xml_response, "<name>Status</name>"),
-        exctract_value(xml_response, "<name>Value</name>"),
+        extract_value_by_name(xml_response, "Status"),
+        extract_value_by_name(xml_response, "Value"),
     )
 }
 
@@ -109,7 +111,7 @@ mod tests {
 
     #[test]
     fn extract_status() {
-        let v = match exctract_value(XML_RESPONSE, "<name>Status</name>") {
+        let v = match extract_value_by_name(XML_RESPONSE, "Status") {
             None => String::new(),
             Some(val) => val,
         };
@@ -119,7 +121,7 @@ mod tests {
 
     #[test]
     fn extract_value() {
-        let v = match exctract_value(XML_RESPONSE, "<name>Value</name>") {
+        let v = match extract_value_by_name(XML_RESPONSE, "Value") {
             None => String::new(),
             Some(val) => val,
         };
