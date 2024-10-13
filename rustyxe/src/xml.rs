@@ -14,7 +14,6 @@ pub fn create_xmlrpc_request(method: &str, params: Vec<&str>) -> String {
     for param in params {
         xml_body.push_str(format!("<param><value>{}</value></param>", param).as_str());
     }
-    xml_body.push_str("<param><value>1.0</value></param>");
     xml_body.push_str("</params>");
     xml_body.push_str("</methodCall>");
 
