@@ -43,14 +43,22 @@ fn main() -> std::io::Result<()> {
 
     debug!("Response received");
     if let Ok(recv_str) = std::str::from_utf8(&recv_buf[..recv_bytes]) {
-        debug!("{}", recv_str);
         match xml::extract_result(recv_str) {
-            (None, _) => error!("Failed to get status of response"),
-            (Some(s), None) => error!("status is {} but value is None", s),
-            (Some(s), Some(v)) => info!("status is {} and value is {}", s, v),
+            (None, _) => error!("Failed to get status from response\nresponse: {}", recv_str),
+            (Some(s), None) => error!("status is {} but value is None.\nresponse: {}", s, recv_str),
+            (Some(s), Some(v)) => {
+                if s == *"Success" {
+                    info!("{}: value is {}", s, v);
+                } else {
+                    error!(
+                        "Satus {}, Sucess was expected. Found value {}\nresponse: {}",
+                        s, v, recv_str
+                    );
+                }
+            }
         }
     } else {
-        error!("ERROR: invalid utf8")
+        error!("invalid utf8: {:?}", &recv_buf[..recv_bytes]);
     }
 
     Ok(())
