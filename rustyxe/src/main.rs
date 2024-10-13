@@ -32,17 +32,31 @@ fn main() -> std::io::Result<()> {
     debug!("{}", xmlrpc_request);
     stream.write_all(xmlrpc_request.as_bytes())?;
 
-    let mut recv_buf = [0; 1024];
-    let recv_bytes = match stream.read(&mut recv_buf) {
-        Ok(v) => v,
-        Err(_) => {
-            error!("Failed to read stream");
-            std::process::exit(1);
-        }
-    };
+    let mut recv_buf = Vec::new();
+    let mut recv_tmp = [0; 1024];
+    loop {
+        match stream.read(&mut recv_tmp) {
+            Ok(0) => break, // connection is closed and all data are read
+            Ok(n) => {
+                recv_buf.extend_from_slice(&recv_tmp[..n]);
+                // It looks like the server doesn't close the connection so
+                // we check if we received the </methodResponse> the indicates
+                // that we have all data.
+                let recv_str = String::from_utf8_lossy(&recv_buf);
+                if recv_str.find("</methodResponse>").is_some() {
+                    break;
+                }
+            }
+            Err(_) => {
+                error!("Failed to read stream");
+                std::process::exit(1);
+            }
+        };
+    }
 
     debug!("Response received");
-    if let Ok(recv_str) = std::str::from_utf8(&recv_buf[..recv_bytes]) {
+    // Check that we only have valid utf8
+    if let Ok(recv_str) = std::str::from_utf8(&recv_buf) {
         match xml::extract_result(recv_str) {
             (None, _) => error!("Failed to get status\nresponse: {}", recv_str),
             (Some(s), None) => error!("status is {} but value is None.\nresponse: {}", s, recv_str),
@@ -58,7 +72,7 @@ fn main() -> std::io::Result<()> {
             }
         }
     } else {
-        error!("invalid utf8: {:?}", &recv_buf[..recv_bytes]);
+        error!("invalid utf8: {:?}", &recv_buf);
     }
 
     Ok(())
