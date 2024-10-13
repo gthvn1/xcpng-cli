@@ -44,14 +44,14 @@ fn main() -> std::io::Result<()> {
     debug!("Response received");
     if let Ok(recv_str) = std::str::from_utf8(&recv_buf[..recv_bytes]) {
         match xml::extract_result(recv_str) {
-            (None, _) => error!("Failed to get status from response\nresponse: {}", recv_str),
+            (None, _) => error!("Failed to get status\nresponse: {}", recv_str),
             (Some(s), None) => error!("status is {} but value is None.\nresponse: {}", s, recv_str),
             (Some(s), Some(v)) => {
                 if s == *"Success" {
                     info!("{}: value is {}", s, v);
                 } else {
                     error!(
-                        "Satus {}, Sucess was expected. Found value {}\nresponse: {}",
+                        "Satus {}, Success was expected. Found value {}\nresponse: {}",
                         s, v, recv_str
                     );
                 }

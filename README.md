@@ -10,8 +10,8 @@ about the disks, **but** eventually, we aim to build something more interactive,
 - And it was **tested a little little bit** on xcpng 8.3
 
 - **rustyxe** is an attempt to write the Xen API command interface in Rust. This is the very beginning. We are able to send the login XML-RPC and received
-the credentials.
-  - `RUST_LOG=debug cargo run`
+the credentials. It is completely independant project, there is no relation with python scripts.
+  - `(cd rustyxe && RUST_LOG=debug cargo run)`
   - Todo
     - [x] get credentials
     - [ ] get information about hosts
