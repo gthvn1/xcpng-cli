@@ -34,29 +34,9 @@ pub fn create_xmlrpc_request(method: &str, params: Vec<&str>) -> String {
     xml_req
 }
 
-//
-// Extract the value from the XML-RPC response
-// Here is an example of the XML-RPC response:
-// <?xml version="1.0"?>
-// <methodResponse>
-//    <params>
-//      <param>
-//        <value>
-//          <struct>
-//            <member>
-//              <name>Status</name>
-//              <value>Success</value>
-//            </member>
-//            <member>
-//              <name>Value</name>
-//              <value>OpaqueRef:123456789</value>
-//            </member>
-//          </struct>
-//        </value>
-//      </param>
-//    </params>
-//  </methodResponse>
-// Return the Status and the Value
+// Extract the given tag from the XML-RPC response. It looks for <name>tag</name>
+// and it is case sensitive.
+// See the test to have an example of an XML-RPC response.
 fn extract_value_by_name(xml_response: &str, tag: &str) -> Option<String> {
     let tag_str = format!("<name>{}</name>", tag);
 
