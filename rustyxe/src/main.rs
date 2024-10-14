@@ -42,6 +42,7 @@ fn main() -> std::io::Result<()> {
                 // It looks like the server doesn't close the connection so
                 // we check if we received the </methodResponse> the indicates
                 // that we have all data.
+                // FIXME: What to do if there is no ending tag
                 let recv_str = String::from_utf8_lossy(&recv_buf);
                 if recv_str.find("</methodResponse>").is_some() {
                     break;
