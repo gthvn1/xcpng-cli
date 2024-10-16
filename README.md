@@ -85,6 +85,10 @@ the credentials. It is completely independant project, there is no relation with
 
 - The two following scripts must be copied on your XCP-ng hosts.
 
+### cbt-ls.py
+- Get information about CBT (need to be enabled)
+- It also requires `bitstring`
+
 ### repl.py
 - You can use `repl.py` in interactive mode. Then you have a session open and can run command easily:
 ```sh
