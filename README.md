@@ -86,7 +86,7 @@ the credentials. It is completely independant project, there is no relation with
 
 ## Run on the XCP-ng host
 
-- The two following scripts must be copied on your XCP-ng hosts.
+- Following scripts must be copied on your XCP-ng hosts.
 
 ### cbt-ls.py
 - Get information about CBT (need to be enabled)
