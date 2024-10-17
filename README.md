@@ -2,9 +2,10 @@
 
 - For now, it is just some simple Python scripts to retrieve information mainly
 about the disks, **but** eventually, we aim to build something more interactive, like the [Ranger file manager](https://github.com/ranger/ranger).
-  - *xcpng-cli.py*: dumps some info about VM, SR and VDI
+  - *cbt-ls.py*: reads CBT bitmap between two VDI snapshots
   - *repl.py*: runs in interactive mode and just setup a xapi session
   - *vhd-hierarchy.py*: dumps hierarchy of VDIs under `/var/run/sr-mount/`
+  - *xcpng-cli.py*: dumps some info about VM, SR and VDI
 - It requires [XenAPI](https://pypi.org/project/XenAPI/) and also if you want to
 run the cbt script [bitstream](https://pypi.org/project/bitstring/) (See `requirements.txt`)
   - can be install using `pip install -r requirements.txt`
