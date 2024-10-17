@@ -5,8 +5,10 @@ about the disks, **but** eventually, we aim to build something more interactive,
   - *xcpng-cli.py*: dumps some info about VM, SR and VDI
   - *repl.py*: runs in interactive mode and just setup a xapi session
   - *vhd-hierarchy.py*: dumps hierarchy of VDIs under `/var/run/sr-mount/`
-- XenAPI has been taken from [xapi-project](https://github.com/xapi-project/xen-api/tree/7670247ae6a3c656ae60123dc550a9eb415d5ba4/python3/examples/XenAPI).
-- It has been tested using python3.11
+- It requires [XenAPI](https://pypi.org/project/XenAPI/) and also if you want to
+run the cbt script [bitstream](https://pypi.org/project/bitstring/) (See `requirements.txt`)
+  - can be install using `pip install -r requirements.txt`
+- It has been tested using python3.11, XenAPI-24.33.0, and bitstring-4.2.3
 - And it was **tested a little little bit** on xcpng 8.3
 
 - **rustyxe** is an attempt to write the Xen API command interface in Rust. This is the very beginning. We are able to send the login XML-RPC and received
@@ -20,12 +22,12 @@ the credentials. It is completely independant project, there is no relation with
 
 ## Run on your machine
 
-### xcpng-ls.py
+### xcpng-cli.py
 - This one can be run on your machine and it will connect to XCP-ng hosts to get information
 - Usage: `python3 ./xcpng-cli.py --ips 1.2.3.4,1.2.3.5 --username <USER> --password <PASS>` 
 - Here is the kind of output you can have currently:
 ```sh
-# ./xcpng-ls.py
+# ./xcpng-cli.py
 -- GENERAL INFOS --
 
 [Host xcp-ng-canaweed2]
